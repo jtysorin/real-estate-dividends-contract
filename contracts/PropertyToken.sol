@@ -48,11 +48,10 @@ contract PropertyToken is ERC20 {
     }
 
     /// @notice Deposit the amount that has to be payed
-    /// @dev The amount deposited is splitted in one unit for the number of tokens
-    ///      and added to the total dividend received per token.
+    /// @dev The amount deposited is added to the total earnings all time.
     ///      Emits a {Deposited} event.
     function deposit() public payable {
-        s_totalEarnings += (msg.value / (totalSupply() / (10 ** decimals())));
+        s_totalEarnings += msg.value;
         emit Deposited(msg.sender, msg.value);
     }
 
@@ -84,13 +83,13 @@ contract PropertyToken is ERC20 {
     /// @param amountToWithdraw the amount to withdraw
 
     function updateDividend(address account, uint256 amountToWithdraw) internal {
-        uint256 owed = s_totalEarnings - s_snapshotTotalEarnings[account];
-        s_leftForWithdrawal[account] += (balanceOf(account) * owed) / (10 ** decimals());
-
-        if (s_leftForWithdrawal[account] < amountToWithdraw) {
+        uint256 availableForWithdrawal = getAvailableForWithdrawal(account);
+        if (availableForWithdrawal < amountToWithdraw) {
             revert PropertyToken__NotEnoughForWithdrawal();
         }
-        s_leftForWithdrawal[account] -= amountToWithdraw;
+        unchecked {
+            s_leftForWithdrawal[account] = availableForWithdrawal - amountToWithdraw;
+        }
         s_snapshotTotalEarnings[account] = s_totalEarnings;
     }
 
@@ -140,6 +139,6 @@ contract PropertyToken is ERC20 {
         availableForWithdrawal =
             s_leftForWithdrawal[account] +
             (balanceOf(account) * owed) /
-            (10 ** decimals());
+            totalSupply();
     }
 }

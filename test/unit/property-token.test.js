@@ -74,13 +74,13 @@ const { developmentChains, INITIAL_SUPPLY } = require("../../helper-hardhat-conf
           });
 
           describe("deposit", () => {
-              it("should increase the dividend received when deposit", async () => {
+              it("should increase the total earnings when deposit", async () => {
                   const initialTotalEarnings = await propertyToken.getTotalEarnings();
                   await propertyToken.deposit({ value: ONE_ETHER });
                   const totalEarnings = await propertyToken.getTotalEarnings();
                   assert.equal(
                       totalEarnings.toString(),
-                      initialTotalEarnings.add(ONE_ETHER.div(INITIAL_SUPPLY)).toString()
+                      initialTotalEarnings.add(ONE_ETHER).toString()
                   );
               });
 
@@ -196,11 +196,8 @@ const { developmentChains, INITIAL_SUPPLY } = require("../../helper-hardhat-conf
                   snapshotTotalEarnings = await propertyToken.getSnapshotTotalEarnings(deployer);
                   leftForWithdrawal = await propertyToken.getLeftForWithdrawal(deployer);
                   availableForWithdrawal = await propertyToken.getAvailableForWithdrawal(deployer);
-                  assert.equal(totalEarnings.toString(), ONE_ETHER.div(INITIAL_SUPPLY).toString());
-                  assert.equal(
-                      snapshotTotalEarnings.toString(),
-                      ONE_ETHER.div(INITIAL_SUPPLY).toString()
-                  );
+                  assert.equal(totalEarnings.toString(), ONE_ETHER.toString());
+                  assert.equal(snapshotTotalEarnings.toString(), ONE_ETHER.toString());
                   assert.equal(
                       leftForWithdrawal.toString(),
                       ethers.utils.parseUnits("0.8").toString()
@@ -218,14 +215,8 @@ const { developmentChains, INITIAL_SUPPLY } = require("../../helper-hardhat-conf
                   snapshotTotalEarnings = await propertyToken.getSnapshotTotalEarnings(deployer);
                   leftForWithdrawal = await propertyToken.getLeftForWithdrawal(deployer);
                   availableForWithdrawal = await propertyToken.getAvailableForWithdrawal(deployer);
-                  assert.equal(
-                      totalEarnings.toString(),
-                      ethers.utils.parseEther("2").div(INITIAL_SUPPLY).toString()
-                  );
-                  assert.equal(
-                      snapshotTotalEarnings.toString(),
-                      ONE_ETHER.div(INITIAL_SUPPLY).toString()
-                  );
+                  assert.equal(totalEarnings.toString(), ethers.utils.parseEther("2").toString());
+                  assert.equal(snapshotTotalEarnings.toString(), ONE_ETHER.toString());
                   assert.equal(
                       leftForWithdrawal.toString(),
                       ethers.utils.parseUnits("0.8").toString()
@@ -256,13 +247,10 @@ const { developmentChains, INITIAL_SUPPLY } = require("../../helper-hardhat-conf
                   snapshotTotalEarnings = await propertyToken.getSnapshotTotalEarnings(deployer);
                   leftForWithdrawal = await propertyToken.getLeftForWithdrawal(deployer);
                   availableForWithdrawal = await propertyToken.getAvailableForWithdrawal(deployer);
-                  assert.equal(
-                      totalEarnings.toString(),
-                      ethers.utils.parseUnits("2").div(INITIAL_SUPPLY).toString()
-                  );
+                  assert.equal(totalEarnings.toString(), ethers.utils.parseUnits("2").toString());
                   assert.equal(
                       snapshotTotalEarnings.toString(),
-                      ethers.utils.parseUnits("2").div(INITIAL_SUPPLY).toString()
+                      ethers.utils.parseUnits("2").toString()
                   );
                   assert.equal(leftForWithdrawal.toString(), "0");
                   assert.equal(availableForWithdrawal.toString(), "0");
@@ -302,7 +290,7 @@ const { developmentChains, INITIAL_SUPPLY } = require("../../helper-hardhat-conf
                   );
                   assert.equal(
                       deployerSnapshotTotalEarnings.toString(),
-                      ethers.utils.parseUnits("2").div(INITIAL_SUPPLY).toString()
+                      ethers.utils.parseUnits("2").toString()
                   );
                   assert.equal(deployerLeftForWithdrawal.toString(), "0");
 
@@ -332,7 +320,7 @@ const { developmentChains, INITIAL_SUPPLY } = require("../../helper-hardhat-conf
                   );
                   assert.equal(
                       user1SnapshotTotalEarnings.toString(),
-                      ethers.utils.parseUnits("2").div(INITIAL_SUPPLY).toString()
+                      ethers.utils.parseUnits("2").toString()
                   );
                   assert.equal(user1LeftForWithdrawal.toString(), "0");
               });
