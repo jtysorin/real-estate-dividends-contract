@@ -81,7 +81,6 @@ contract PropertyToken is ERC20 {
     ///      amount required for withdrawal.
     /// @param account the account to update the dividend
     /// @param amountToWithdraw the amount to withdraw
-
     function updateDividend(address account, uint256 amountToWithdraw) internal {
         uint256 availableForWithdrawal = getAvailableForWithdrawal(account);
         if (availableForWithdrawal < amountToWithdraw) {
