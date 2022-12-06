@@ -5,6 +5,7 @@ require("solidity-coverage");
 require("hardhat-gas-reporter");
 require("hardhat-contract-sizer");
 require("dotenv").config();
+require("@openzeppelin/hardhat-upgrades");
 
 const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL;
 const MUMBAI_RPC_URL = process.env.MUMBAI_RPC_URL;
@@ -19,9 +20,11 @@ module.exports = {
         hardhat: {
             chainId: 31337,
             blockConfirmations: 1,
+            allowUnlimitedContractSize: true,
         },
         localhost: {
             chainId: 31337,
+            allowUnlimitedContractSize: true,
         },
         goerli: {
             chainId: 5,
@@ -44,7 +47,7 @@ module.exports = {
         },
     },
     gasReporter: {
-        enabled: true,
+        enabled: process.env.REPORT_GAS ? true : false,
         outputFile: "gas-report.txt",
         noColors: true,
         currency: "USD",

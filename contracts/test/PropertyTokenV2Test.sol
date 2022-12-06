@@ -13,7 +13,7 @@ error PropertyToken__NotEnoughForWithdrawal();
 ///         their token amount
 /// @dev All function calls are currently implemented without side effects
 /// @custom:experimental this is an experimental contract
-contract PropertyToken is ERC20Upgradeable {
+contract PropertyTokenV2Test is ERC20Upgradeable {
     uint256 private s_totalEarnings;
 
     mapping(address => uint256) private s_leftForWithdrawal;
@@ -136,5 +136,9 @@ contract PropertyToken is ERC20Upgradeable {
             s_leftForWithdrawal[account] +
             (balanceOf(account) * owed) /
             totalSupply();
+    }
+
+    function getVersion() public view returns (string memory) {
+        return "Version 2";
     }
 }

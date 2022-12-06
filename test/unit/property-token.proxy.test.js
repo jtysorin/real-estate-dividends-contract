@@ -4,7 +4,7 @@ const { developmentChains, INITIAL_SUPPLY } = require("../../helper-hardhat-conf
 
 !developmentChains.includes(network.name)
     ? describe.skip
-    : describe("Property Token Tests", () => {
+    : describe("Property Token Proxy Tests", () => {
           let PropertyToken, propertyToken, deployer, user1;
           const ONE_ETHER = ethers.utils.parseEther("1");
 
@@ -14,9 +14,9 @@ const { developmentChains, INITIAL_SUPPLY } = require("../../helper-hardhat-conf
               user1 = accounts.user1;
 
               PropertyToken = await ethers.getContractFactory("PropertyToken");
-              propertyToken = await PropertyToken.deploy();
-              await propertyToken.deployed();
-              await propertyToken.initialize(INITIAL_SUPPLY);
+              propertyToken = await upgrades.deployProxy(PropertyToken, [INITIAL_SUPPLY], {
+                  initializer: "initialize",
+              });
           });
 
           it("was deployed", async () => {

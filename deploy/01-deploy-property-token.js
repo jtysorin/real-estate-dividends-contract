@@ -1,26 +1,22 @@
-const { network } = require("hardhat");
+const { network, ethers, upgrades } = require("hardhat");
 const { developmentChains, INITIAL_SUPPLY } = require("../helper-hardhat-config");
 const { verify } = require("../utils/verify");
 
-module.exports = async function ({ deployments, getNamedAccounts }) {
-    const { deploy, log } = deployments;
-    const { deployer } = await getNamedAccounts();
-    const initialSupply = INITIAL_SUPPLY;
-    const args = [initialSupply];
-
-    const propertyToken = await deploy("PropertyToken", {
-        from: deployer,
-        args: args,
-        log: true,
-        waitConfirmations: network.config.blockConfirmations || 1,
+module.exports = async function () {
+    const PropertyToken = await ethers.getContractFactory("PropertyToken");
+    console.log("Deploying PropertyToken, ProxyAdmin, and then Proxy...");
+    const proxyPropertyToken = await upgrades.deployProxy(PropertyToken, [INITIAL_SUPPLY], {
+        initializer: "initialize",
     });
-    log(`PropertyToken deployed at ${propertyToken.address}`);
+    await proxyPropertyToken.deployed();
+    console.log("Proxy of PropertyToken deployed to:", proxyPropertyToken.address);
+    console.log(upgrades);
 
     if (!developmentChains.includes(network.name) && process.env.POLYGONSCAN_API_KEY) {
-        log("Verify...");
-        await verify(propertyToken.address, args);
+        console.log("Verify...");
+        await verify(proxyPropertyToken.address, []);
     }
-    log("__________________________________________");
+    console.log("__________________________________________");
 };
 
 module.exports.tags = ["all", "propertytoken"];

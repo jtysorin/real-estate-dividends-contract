@@ -8,6 +8,8 @@
   - [Testing](#testing)
     - [Test Coverage](#test-coverage)
 - [Deployment to a testnet or mainnet](#deployment-to-a-testnet-or-mainnet)
+    - [Scripts](#scripts)
+    - [Upgrade Contract](#upgrade-contract)
     - [Estimate gas cost in USD](#estimate-gas-cost-in-usd)
   - [Verify on etherscan](#verify-on-etherscan)
 - [Linting](#linting)
@@ -81,6 +83,8 @@ yarn hardhat deploy --network goerli
 
 And copy / remember the contract address. 
 
+## Scripts
+
 4. Get your dividends!
 
 You're contract is now up and running.
@@ -107,6 +111,30 @@ Check your ETH dividends available for withdrawal by running:
 
 ```
 yarn hardhat run scripts/get-available-for-withdrawal.js--network goerli
+```
+
+## Upgrade Contract
+
+Before upgrading the contract make sure you have set the environment variables to be able to verify it on etherscan.
+You can check [Verify on etherscan](#verify-on-etherscan) section.
+
+To upgrade the contract create a new one and set its name as an environment variable named `PROPERTY_TOKEN_UPGRADE`
+and the proxy address of your contract as an environment variable named `PROXY_ADDRESS`.
+You can pop it into your `.env` file as seen in the `.env.example`.
+
+The way the upgrade is done is via *transparent proxy* pattern. Make sure you are aware of how to properly write you upgraded contrct
+before you perform the upgrade by checking the [Proxy Upgrade Pattern](https://docs.openzeppelin.com/upgrades-plugins/1.x/proxies#transparent-proxies-and-function-clashes) from OpenZeppeling.
+
+It is recommended to clean your cache and artifacts before running the upgrade script by running:
+
+```
+yarn hardhat clean
+```
+
+Upgrade the contract by running:
+
+```
+yarn hardhat run scripts/upgrade-contract.js --network goerli
 ```
 
 
