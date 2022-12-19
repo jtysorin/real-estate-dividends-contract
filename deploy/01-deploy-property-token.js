@@ -10,9 +10,10 @@ module.exports = async function () {
     });
     await proxyPropertyToken.deployed();
     console.log("Proxy of PropertyToken deployed to:", proxyPropertyToken.address);
-    console.log(upgrades);
 
     if (!developmentChains.includes(network.name) && process.env.POLYGONSCAN_API_KEY) {
+        console.log("Waiting a few blocks...");
+        await proxyPropertyToken.deployTransaction.wait(3);
         console.log("Verify...");
         await verify(proxyPropertyToken.address, []);
     }

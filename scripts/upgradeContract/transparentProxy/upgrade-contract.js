@@ -1,6 +1,6 @@
 const { network, ethers, upgrades } = require("hardhat");
-const { developmentChains } = require("../helper-hardhat-config");
-const { verify } = require("../utils/verify");
+const { developmentChains } = require("../../../helper-hardhat-config");
+const { verify } = require("../../../utils/verify");
 
 const PROPERTY_TOKEN_UPGRADE = process.env.PROPERTY_TOKEN_UPGRADE;
 const PROXY_ADDRESS = process.env.PROXY_ADDRESS;
